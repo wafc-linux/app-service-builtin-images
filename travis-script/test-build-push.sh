@@ -8,7 +8,7 @@ function _do()
 }
 
 build_image(){
-    echo "${ACR_PASSWORD}" | _do docker login "${ACR_SERVER}" -u="${ACR_USERNAME }" --password-stdin	
+    echo "${ACR_PASSWORD}" | _do docker login "${ACR_SERVER}" -u="${ACR_USERNAME}" --password-stdin	
     _do cd ${DOCKER_IMAGE_NAME}"/"${DOCKER_IMAGE_VERSION}
     _do docker build -t "${DOCKER_IMAGE_NAME}" .
     _do cd $TRAVIS_BUILD_DIR    
@@ -25,7 +25,7 @@ build_image(){
 
 setTag_push_rm(){
     echo "TAG: ${TAG}"
-    _do docker tag "${DOCKER_IMAGE_NAME}" "${ACR_USERNAME }"/"${DOCKER_IMAGE_NAME}":"${TAG}"
+    _do docker tag "${DOCKER_IMAGE_NAME}" "${ACR_USERNAME}"/"${DOCKER_IMAGE_NAME}":"${TAG}"
     testBuildImage=$(docker images | grep "$TAG")
     if [ -z "${testBuildImage}" ]; then 
         echo "FAILED - Set TAG Failed!!!"
@@ -62,7 +62,7 @@ echo "TRAVIS_COMMIT_MESSAGE: ${TRAVIS_COMMIT_MESSAGE}"
 
 pushed="false"
 # "#sign-off exist!"
-if [ "$ACR_USERNAME " == "$PROD_ACR_USERNAME" ]; then
+if [ "$ACR_USERNAME" == "$PROD_ACR_USERNAME" ]; then
     echo "INFORMATION - This time, push to production environment......"
     TAG=${DOCKER_IMAGE_VERSION}
     echo "INFORMATION - Set TAG as ""${TAG}"" and push......" 
@@ -77,10 +77,10 @@ fi
 
 echo "========================================"
 echo "Stage4 - PULL and Verify"
-echo "INFORMATION - Start to Pull ""${ACR_USERNAME }"/"${DOCKER_IMAGE_NAME}":"${TAG}"
+echo "INFORMATION - Start to Pull ""${ACR_USERNAME}"/"${DOCKER_IMAGE_NAME}":"${TAG}"
 echo "INFORMATION - Before Pull - docker images"
 _do docker images
-_do docker run -d -p 80:80 --name testdocker $ACR_USERNAME /${DOCKER_IMAGE_NAME}:"$TAG"
+_do docker run -d -p 80:80 --name testdocker $ACR_USERNAME/${DOCKER_IMAGE_NAME}:"$TAG"
 echo "INFORMATION: After Pull - docker images"
 _do docker images
 testBuildImage=$(docker images | grep "${TAG}")
@@ -96,7 +96,7 @@ testBuildImage=$(docker images | grep "${TAG}")
     fi
 _do docker stop testdocker
 _do docker rm testdocker
-_do docker rmi ${ACR_USERNAME }"/"${DOCKER_IMAGE_NAME}":"${TAG}
+_do docker rmi ${ACR_USERNAME}"/"${DOCKER_IMAGE_NAME}":"${TAG}
 echo "========================================"
 echo "========================================" >> result.log
 

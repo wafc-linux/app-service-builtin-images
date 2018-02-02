@@ -1,4 +1,4 @@
-${ACR_SERVER}"DOCKER_IMAGE_NAME=$1
+DOCKER_IMAGE_NAME=$1
 DOCKER_IMAGE_VERSION=$2
 
 # If script run to error, exist -1;
@@ -8,7 +8,7 @@ function _do()
 }
 
 build_image(){
-    _do echo "${ACR_PASSWORD}" | _do docker login "${ACR_SERVER}" -u="${ACR_USERNAME}" --password-stdin	
+    _do echo "${DOCKER_PASSWORD}" | _do docker login "${ACR_SERVER}" -u="${ACR_USERNAME}" --password-stdin	
     _do cd ${DOCKER_IMAGE_NAME}"/"${DOCKER_IMAGE_VERSION}
     _do docker build -t "${DOCKER_IMAGE_NAME}" .
     _do cd $TRAVIS_BUILD_DIR    

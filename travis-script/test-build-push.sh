@@ -8,8 +8,7 @@ function _do()
 }
 
 build_image(){
-    _do echo "${ACR_SERVER}"
-    _do echo "${ACR_PASSWORD}" | _do docker login "${ACR_SERVER}" -u="${ACR_USERNAME}" --password-stdin	
+    _do echo "${DOCKER_PASSWORD}" | _do docker login "${ACR_REPO}" -u="${DOCKER_USERNAME}" --password-stdin	
     _do cd ${DOCKER_IMAGE_NAME}"/"${DOCKER_IMAGE_VERSION}
     _do docker build -t "${DOCKER_IMAGE_NAME}" .
     _do cd $TRAVIS_BUILD_DIR    
@@ -27,7 +26,7 @@ build_image(){
 
 setTag_push_rm(){
     echo "TAG: ${TAG}"
-    _do docker tag "${DOCKER_IMAGE_NAME}" "${ACR_SERVER}"/"${DOCKER_IMAGE_NAME}":"${TAG}"
+    _do docker tag "${DOCKER_IMAGE_NAME}" "${DOCKER_ACCOUNT}"/"${DOCKER_IMAGE_NAME}":"${TAG}"
     testBuildImage=$(docker images | grep "$TAG")
     if [ -z "${testBuildImage}" ]; then 
         echo "FAILED - Set TAG Failed!!!"
@@ -38,13 +37,13 @@ setTag_push_rm(){
         echo "PASSED - Set TAG Successfully!."
         echo "PASSED - Set TAG Successfully!." >> result.log
     fi
-    _do docker push "${ACR_SERVER}"/"${DOCKER_IMAGE_NAME}":"${TAG}"
-    echo "PASSED - Pushed  ${ACR_SERVER}/${DOCKER_IMAGE_NAME}:${TAG} Successfully!."
-    echo "PASSED - Pushed  ${ACR_SERVER}/${DOCKER_IMAGE_NAME}:${TAG} Successfully!." >> result.log
+    _do docker push "${DOCKER_ACCOUNT}"/"${DOCKER_IMAGE_NAME}":"${TAG}"
+    echo "PASSED - Pushed  ${DOCKER_ACCOUNT}/${DOCKER_IMAGE_NAME}:${TAG} Successfully!."
+    echo "PASSED - Pushed  ${DOCKER_ACCOUNT}/${DOCKER_IMAGE_NAME}:${TAG} Successfully!." >> result.log
     echo "INFORMATION: Before rmi - docker images"
     _do docker images
-    echo "INFORMATION - RM ""${ACR_SERVER}"/"${DOCKER_IMAGE_NAME}":"${TAG}"
-    _do docker rmi "${ACR_SERVER}"/"${DOCKER_IMAGE_NAME}":"${TAG}"
+    echo "INFORMATION - RM ""${DOCKER_ACCOUNT}"/"${DOCKER_IMAGE_NAME}":"${TAG}"
+    _do docker rmi "${DOCKER_ACCOUNT}"/"${DOCKER_IMAGE_NAME}":"${TAG}"
     echo "INFORMATION - After rmi - docker images"
     _do docker images
 }
@@ -52,10 +51,9 @@ setTag_push_rm(){
 echo "Stage2 - Build Image"
 echo "INFORMATION - Start to Build......"
 echo "INFORMATION - Start to Build......"${DOCKER_IMAGE_NAME}":"$DOCKER_IMAGE_VERSION >> result.log
-build_image
 echo "========================================"
 echo "========================================" >> result.log
-
+build_image
 echo "Stage3 - Set Tag and Push"
 echo "Stage3 - Set Tag and Push" >> result.log
 echo "Build Number: ${TRAVIS_BUILD_NUMBER}"
@@ -63,11 +61,11 @@ echo "TRAVIS_EVENT_TYPE: ${TRAVIS_EVENT_TYPE}"
 echo "TRAVIS_COMMIT_MESSAGE: ${TRAVIS_COMMIT_MESSAGE}"
 
 # "#sign-off exist!"
-if [ $ACR_USERNAME == $PROD_ACR_USERNAME ]; then
-    echo "INFORMATION - This time, push to production dockhub......"    
+if [ $DOCKER_USERNAME == $PROD_DOCKER_USERNAME ]; then
+    echo "INFORMATION - This time, push to production docker repo......"    
     TAG=${DOCKER_IMAGE_VERSION}       
 else
-    echo "INFORMATION - This time, push to Testing dockhub......"    
+    echo "INFORMATION - This time, push to Testing docker repo ....."    
     TAG=${DOCKER_IMAGE_VERSION}"-"${TRAVIS_BUILD_NUMBER}        
 fi
 echo "INFORMATION - Set TAG as ""${TAG}"" and push......" 
@@ -75,10 +73,10 @@ setTag_push_rm
 
 echo "========================================"
 echo "Stage4 - PULL and Verify"
-echo "INFORMATION - Start to Pull ""${ACR_SERVER}"/"${DOCKER_IMAGE_NAME}":"${TAG}"
+echo "INFORMATION - Start to Pull ""${DOCKER_ACCOUNT}"/"${DOCKER_IMAGE_NAME}":"${TAG}"
 echo "INFORMATION - Before Pull - docker images"
 _do docker images
-_do docker run -d -p 80:80 --name testdocker $ACR_SERVER/${DOCKER_IMAGE_NAME}:"$TAG"
+_do docker run -d -p 80:80 --name testdocker $DOCKER_ACCOUNT/${DOCKER_IMAGE_NAME}:"$TAG"
 echo "INFORMATION: After Pull - docker images"
 _do docker images
 testBuildImage=$(docker images | grep "${TAG}")
@@ -94,6 +92,6 @@ testBuildImage=$(docker images | grep "${TAG}")
     fi
 _do docker stop testdocker
 _do docker rm testdocker
-_do docker rmi ${ACR_SERVER}"/"${DOCKER_IMAGE_NAME}":"${TAG}
+_do docker rmi ${DOCKER_ACCOUNT}"/"${DOCKER_IMAGE_NAME}":"${TAG}
 echo "========================================"
 echo "========================================" >> result.log

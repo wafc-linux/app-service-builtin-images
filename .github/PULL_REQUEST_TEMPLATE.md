@@ -9,8 +9,8 @@
 
 ```
 Please check both statements below to agree our contribution policies. 
-[] - I have submitted the PR if you've read through the Contribution Guide and best practices checklist.
-[] - I certify that the Docker image was tested successfully at runtime using Web App for Containers or Linux Web App.
+[ ]  I have submitted the PR if you've read through the Contribution Guide and best practices checklist.
+[ ]  I certify that the Docker image was tested successfully at runtime using Web App for Containers or Linux Web App.
 ```
 
 ### Changelog
@@ -26,3 +26,4 @@ What kind of change does this Pull Request introduce? Please check the one that 
 [ ] Refactoring (no functional changes, no api changes)
 [ ] Documentation content changes
 [ ] Other... Please describe:
+```

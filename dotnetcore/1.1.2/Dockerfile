@@ -21,6 +21,7 @@ RUN apt-get update \
   && chmod 755 /bin/init_container.sh \
   && mkdir -p /home/LogFiles/
 
+#Port
 EXPOSE 2222 8080
 
 ENV PORT 8080

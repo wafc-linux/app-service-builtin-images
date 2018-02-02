@@ -21,9 +21,9 @@ Please check both statements below to agree our contribution policies.
 What kind of change does this Pull Request introduce? Please check the one that applies to this PR using "x".
 
 ```
-[ ] Bugfix
+[ ] Bugfix . Please describe the bug fix : 
 [ ] Code style update (formatting, local variables)
-[ ] Refactoring (no functional changes, no api changes)
-[ ] Documentation content changes
+[ ] New Docker image 
+[ ] New version for existing docker image
 [ ] Other... Please describe:
 ```

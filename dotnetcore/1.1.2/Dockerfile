@@ -4,6 +4,8 @@ MAINTAINER Azure App Services Container Images <appsvc-images@microsoft.com>
 COPY bin.zip /tmp
 COPY init_container.sh /bin/
 COPY hostingstart.html /home/site/wwwroot/
+
+#SSH
 COPY sshd_config /etc/ssh/
 
 RUN apt-get update \

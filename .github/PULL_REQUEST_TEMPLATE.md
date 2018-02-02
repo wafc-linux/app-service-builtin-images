@@ -1,21 +1,4 @@
-## Purpose
-<!-- Describe the intention of the changes being proposed. What problem does it solve or functionality does it add? -->
-* ...
-
-
-## Pull Request Type
-What kind of change does this Pull Request introduce? Please check the one that applies to this PR using "x".
-
-```
-[ ] Bugfix
-[ ] Code style update (formatting, local variables)
-[ ] Refactoring (no functional changes, no api changes)
-[ ] Documentation content changes
-[ ] Other... Please describe:
-```
-
-## What to Check
-Review and check the following guidelines before submitting a PR.
+## What to Check - Review and check the following guidelines before submitting a PR.
 1. Include a README.md within version folder to describe :
 	a. Any changes with deployment of use of the image 
 	b. Include comments if the image is not backward compatible and how user can manually upgrade to new version 
@@ -32,3 +15,14 @@ Please check both statements below to agree our contribution policies.
 
 ### Changelog
 - Add your list of changes here 
+
+
+## Pull Request Type
+What kind of change does this Pull Request introduce? Please check the one that applies to this PR using "x".
+
+```
+[ ] Bugfix
+[ ] Code style update (formatting, local variables)
+[ ] Refactoring (no functional changes, no api changes)
+[ ] Documentation content changes
+[ ] Other... Please describe:
